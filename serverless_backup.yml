@@ -1,0 +1,113 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: alchemistdefi-api
+# app and org for use with dashboard.serverless.com
+app: alchemistdefi-api
+org: alchemistdefi
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+    packager: yarn
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ap-northeast-1
+  stage: ${opt:stage, 'dev'}
+  profile: alchemistDefi
+  logRetentionInDays: 30
+  environment:
+    Provider: "https://bsc-dataseed.binance.org/"
+    MistAddress: "0xF952Fc3ca7325Cc27D15885d37117676d25BfdA6"
+    AurumAddress: "0xF952Fc3ca7325Cc27D15885d37117676d25BfdA6"    
+    BurnAddress: "0x000000000000000000000000000000000000dead"
+    ChainID: 56
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:*
+      Resource: arn:aws:lambda:${self:provider.region}:*:*
+#    - Effect: Allow
+#      Action:
+#        - dynamodb:*
+#      Resource: arn:aws:dynamodb:${self:provider.region}:*:*
+
+functions:
+  getAurumTotalSupply:
+    handler: handler.getAurumTotalSupply
+    events:
+      - http:
+          path: getAurumTotalSupply
+          method: get
+          cors: true
+  getAurumCirculatingSupply:
+    handler: handler.getAurumCirculatingSupply
+    events:
+      - http:
+          path: getAurumCirculatingSupply
+          method: get
+          cors: true
+  getMistTotalSupply:
+    handler: handler.getMistTotalSupply
+    events:
+      - http:
+          path: getMistTotalSupply
+          method: get
+          cors: true
+  getMistCirculatingSupply:
+    handler: handler.getMistCirculatingSupply
+    events:
+      - http:
+          path: getMistCirculatingSupply
+          method: get
+          cors: true          
+  getTVL:
+    handler: getTVL.getTVL
+    events:
+      - http:
+          path: getTVL
+          method: get
+          cors: true
+
+# you can add CloudFormation resource templates here
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+    GatewayResponseDefault5XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_5XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
