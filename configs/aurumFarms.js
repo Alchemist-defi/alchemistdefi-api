@@ -34,57 +34,7 @@ export const aurumFarmsConfig = [
     quoteTokenSymbol: QuoteToken.BNB,
     quoteTokenAdresses: contracts.wbnb,
   },
-  {
-    pid: 11,
-    risk: 3,
-    lpSymbol: 'AURUM-MIST LP',
-    lpAddresses: {
-      97: '',
-      56: '0xa71F0BB3C029d397B10685f884A3523DA766827d',
-    },
-    tokenSymbol: 'AURUM',
-    tokenAddresses: {
-      97: '',
-      56: '0x49207BAA3a7332F0716788aa57B088D499bcc104',
-    },
-    quoteTokenSymbol: QuoteToken.AURUM,
-    quoteTokenAdresses: contracts.aurum
-  },
-
-  {
-    pid: 12,
-    risk: 5,
-    lpSymbol: 'MIST-WBNB LP',
-    lpAddresses: {
-      97: '',
-      56: '0xc100Eed27Da3D0dC39075C9051A475f7E0126845',
-    },
-    tokenSymbol: 'MIST',
-    tokenAddresses: {
-      97: '',
-      56: '0x6f8FE12CC34398d15b7D5A5BA933E550DA1D099f',
-    },
-    quoteTokenSymbol: QuoteToken.BNB,
-    quoteTokenAdresses: contracts.wbnb
-  },
-
-  {
-    pid: 3,
-    risk: 5,
-    lpSymbol: 'MIST-BUSD LP',
-    lpAddresses: {
-      97: '0xe423a74956adeC975Ad85fc023307Dea80B51E74',
-      56: '0x70B968ac7F7860b0DB944A302724aa7fE32E370C',
-    },
-    tokenSymbol: 'MIST',
-    tokenAddresses: {
-      97: '0xB8672B92100e8a25261aB0ae76789D05f66afd47',
-      56: '0x6f8FE12CC34398d15b7D5A5BA933E550DA1D099f',
-    },
-    quoteTokenSymbol: QuoteToken.BUSD,
-    quoteTokenAdresses: contracts.busd,
-  },
-
+  
   {
     pid: 2,
     risk: 3,
@@ -101,8 +51,24 @@ export const aurumFarmsConfig = [
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
   },
-
   {
+    pid: 3,
+    risk: 5,
+    lpSymbol: 'MIST-BUSD LP',
+    lpAddresses: {
+      97: '0xe423a74956adeC975Ad85fc023307Dea80B51E74',
+      56: '0x70B968ac7F7860b0DB944A302724aa7fE32E370C',
+    },
+    tokenSymbol: 'MIST',
+    tokenAddresses: {
+      97: '0xB8672B92100e8a25261aB0ae76789D05f66afd47',
+      56: '0x6f8FE12CC34398d15b7D5A5BA933E550DA1D099f',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+  }
+,
+   {
     pid: 5,
     risk: 5,
     lpSymbol: 'KNIGHT-MIST LP',
@@ -119,7 +85,6 @@ export const aurumFarmsConfig = [
     quoteTokenAdresses: contracts.mist,
     isCommunity: true,
   },
-
   {
     pid: 6,
     risk: 3,
@@ -188,7 +153,40 @@ export const aurumFarmsConfig = [
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
-  }
-]
+  },
+  
+  {
+    pid: 11,
+    risk: 3,
+    lpSymbol: 'AURUM-MIST LP',
+    lpAddresses: {
+      97: '',
+      56: '0xa71F0BB3C029d397B10685f884A3523DA766827d',
+    },
+    tokenSymbol: 'AURUM',
+    tokenAddresses: {
+      97: '',
+      56: '0x49207BAA3a7332F0716788aa57B088D499bcc104',
+    },
+    quoteTokenSymbol: QuoteToken.AURUM,
+    quoteTokenAdresses: contracts.aurum
+  },
 
-export default aurumFarms
+  {
+    pid: 12,
+    risk: 5,
+    lpSymbol: 'MIST-WBNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0xc100Eed27Da3D0dC39075C9051A475f7E0126845',
+    },
+    tokenSymbol: 'MIST',
+    tokenAddresses: {
+      97: '',
+      56: '0x6f8FE12CC34398d15b7D5A5BA933E550DA1D099f',
+    },
+    quoteTokenSymbol: QuoteToken.BNB,
+    quoteTokenAdresses: contracts.wbnb
+  },
+
+]
