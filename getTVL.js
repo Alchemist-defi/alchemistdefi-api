@@ -70,12 +70,9 @@ export async function getAurumTVL() {
                 } else {
                     val = (farm.lpTotalInQuoteToken);
                 }
-                
                 value = value.plus(val);
-                console.log ("Checking farm : %s , %s ",farm.pid, val)
             }
         }
-        console.log ("Total Value for all Farms , %s ",value.toFixed(2))
         return success(value.toFixed(2));
     } catch (e) {
         return failure(e);
@@ -84,8 +81,11 @@ export async function getAurumTVL() {
 
 
 export async function getTVL() {
-    try {       
-        return success(ZERO.toFixed(2));
+    try {      
+        const mistTotal = getMistTVL()
+        const aurumTotal = getAurumTVL() 
+        
+        return success(mistTotal+aurumTotal);
     } catch (e) {
         return failure(e);
     }
