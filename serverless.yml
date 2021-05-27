@@ -16,10 +16,6 @@ service: alchemistdefi-service
 app: alchemistdefi-api
 org: alchemistdefi
 
-# You can pin your service to only deploy with a specific Serverless version
-# Check out our docs for more details
-# frameworkVersion: "=X.X.X"
-
 plugins:
   - serverless-webpack
 
@@ -32,25 +28,12 @@ custom:
 provider:
   name: aws
   runtime: nodejs12.x
-  # region: ap-northeast-1
-  # stage: ${opt:stage, 'dev'}
-  # profile: alchemistDefi
   logRetentionInDays: 30
   environment:
     Provider: "https://bsc-dataseed.binance.org/"
     MistAddress: "0x6f8fe12cc34398d15b7d5a5ba933e550da1d099f"
     AurumAddress: "0x49207BAA3a7332F0716788aa57B088D499bcc104"    
     BurnAddress: "0x000000000000000000000000000000000000dead"    
-
-#   iamRoleStatements:
-#     - Effect: Allow
-#       Action:
-#         - lambda:*
-#       Resource: arn:aws:lambda:${self:provider.region}:*:*
-# #    - Effect: Allow
-# #      Action:
-# #        - dynamodb:*
-# #      Resource: arn:aws:dynamodb:${self:provider.region}:*:*
 
 functions:
   getAurumTotalSupply:
@@ -102,25 +85,17 @@ functions:
             path: getAurumTVL
             method: get
             cors: true          
-
-# you can add CloudFormation resource templates here
-# resources:
-#   Resources:
-#     GatewayResponseDefault4XX:
-#       Type: 'AWS::ApiGateway::GatewayResponse'
-#       Properties:
-#         ResponseParameters:
-#           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-#           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-#         ResponseType: DEFAULT_4XX
-#         RestApiId:
-#           Ref: 'ApiGatewayRestApi'
-#     GatewayResponseDefault5XX:
-#       Type: 'AWS::ApiGateway::GatewayResponse'
-#       Properties:
-#         ResponseParameters:
-#           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-#           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-#         ResponseType: DEFAULT_5XX
-#         RestApiId:
-#           Ref: 'ApiGatewayRestApi'
+  getAurumPrice:
+      handler: getTVL.getAurumPrice
+      events:
+        - http:
+            path: getAurumPrice
+            method: get
+            cors: true          
+  getMistPrice:
+      handler: getTVL.getMistPrice
+      events:
+        - http:
+            path: getMistPrice
+            method: get
+            cors: true          

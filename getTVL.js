@@ -15,6 +15,31 @@ const ZERO = new BigNumber(0);
 const web3 = new Web3(process.env.Provider);
 const multi = new web3.eth.Contract(MultiCallAbi, ContractAddresses.multiCall);
 
+
+export async function getMistPrice() {
+    try {        
+        const farms = await fetchMistFarms();        
+        const mistbusdFarm = farms.find(f => f.pid === 0);        
+        const mistPrice = mistbusdFarm.tokenPriceVsQuote ? new BigNumber(mistbusdFarm.tokenPriceVsQuote) : ZERO;        
+        return success(mistPrice.toFixed(2));
+    } catch (e) {
+        return failure(e);
+    }
+}
+
+
+export async function getAurumPrice() {
+    try {        
+        const farms = await fetchAurumFarms();
+        const aurumbusdFarm = farms.find(f => f.pid === 0);
+        const aurumPrice = aurumbusdFarm.tokenPriceVsQuote ? new BigNumber(aurumbusdFarm.tokenPriceVsQuote) : ZERO;        
+        return success(aurumPrice.toFixed(2));
+    } catch (e) {
+        return failure(e);
+    }
+}
+
+
 export async function getMistTVL() {
     try {        
         const farms = await fetchMistFarms();
@@ -81,11 +106,60 @@ export async function getAurumTVL() {
 
 
 export async function getTVL() {
-    try {      
-        const mistTotal = getMistTVL()
-        const aurumTotal = getAurumTVL() 
+    try {     
         
-        return success(mistTotal+aurumTotal);
+        let value = new BigNumber(0);
+      
+        // getting aurum totals
+        const aurumFarms = await fetchAurumFarms();
+        const bnbbusdFarm = aurumFarms.find(f => f.pid === 2);
+        const aurumbusdFarm = aurumFarms.find(f => f.pid === 0);
+        const mistbusdFarm = aurumFarms.find(f => f.pid === 3);
+        const bnbPrice = bnbbusdFarm.tokenPriceVsQuote ? new BigNumber(bnbbusdFarm.tokenPriceVsQuote) : ZERO;
+        const aurumPrice = aurumbusdFarm.tokenPriceVsQuote ? new BigNumber(aurumbusdFarm.tokenPriceVsQuote) : ZERO;        
+        const mistPrice = mistbusdFarm.tokenPriceVsQuote ? new BigNumber(mistbusdFarm.tokenPriceVsQuote) : ZERO;        
+        
+        for (let i = 0; i < aurumFarms.length; i++) {
+            const farm = aurumFarms[i]
+            if (farm.lpTotalInQuoteToken) {
+                let val;
+                if (farm.quoteTokenSymbol === TokenSymbols.BNB) {
+                    val = (bnbPrice.times(farm.lpTotalInQuoteToken));
+                } else if (farm.quoteTokenSymbol === TokenSymbols.AURUM){
+                    val = (aurumPrice.times(farm.lpTotalInQuoteToken));
+                } else if (farm.quoteTokenSymbol === TokenSymbols.MIST){
+                    val = (mistPrice.times(farm.lpTotalInQuoteToken));
+                } else {
+                    val = (farm.lpTotalInQuoteToken);
+                }
+                value = value.plus(val);
+            }
+        }
+
+        // getting mist farms
+        const farms = await fetchMistFarms();
+        // const bnbbusdFarm = farms.find(f => f.pid === 2);
+        // const mistbusdFarm = farms.find(f => f.pid === 0);
+        // const bnbPrice = bnbbusdFarm.tokenPriceVsQuote ? new BigNumber(bnbbusdFarm.tokenPriceVsQuote) : ZERO;
+        // const mistPrice = mistbusdFarm.tokenPriceVsQuote ? new BigNumber(mistbusdFarm.tokenPriceVsQuote) : ZERO;        
+
+        // let value = new BigNumber(0);
+        for (let i = 0; i < farms.length; i++) {
+            const farm = farms[i]
+            if (farm.lpTotalInQuoteToken) {
+                let val;
+                if (farm.quoteTokenSymbol === TokenSymbols.BNB) {
+                    val = (bnbPrice.times(farm.lpTotalInQuoteToken));
+                } else if (farm.quoteTokenSymbol === TokenSymbols.MIST){
+                    val = (mistPrice.times(farm.lpTotalInQuoteToken));
+                } else {
+                    val = (farm.lpTotalInQuoteToken);
+                }
+                value = value.plus(val);
+            }
+        }
+        
+        return success(value.toFixed(2));
     } catch (e) {
         return failure(e);
     }
